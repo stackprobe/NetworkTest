@@ -58,16 +58,16 @@ public:
 		this->TrySort();
 		return this->List->GetElement(index);
 	}
-	Element_t GetElement(Element_t ferret, Element_t defval)
+	Element_t GetElement(Element_t target, Element_t defval)
 	{
-		int index = this->GetIndex(ferret);
+		int index = this->GetIndex(target);
 
 		if(index == -1)
 			return defval;
 
 		return this->List->GetElement(index);
 	}
-	int GetIndex(Element_t ferret)
+	int GetIndex(Element_t target)
 	{
 		this->TrySort();
 
@@ -77,7 +77,7 @@ public:
 		while(lidx + 1 < ridx)
 		{
 			int midx = (lidx + ridx) / 2;
-			int ret = this->Comp(ferret, this->List->GetElement(midx));
+			int ret = this->Comp(target, this->List->GetElement(midx));
 
 			if(ret == 0)
 				return midx;
