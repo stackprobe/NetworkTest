@@ -171,6 +171,51 @@ static int UnputHash(autoList<uchar> *data) // ret: ? 正常なデータ
 
 static autoList<uchar> *SendRecv(int sock, autoList<uchar> *sendData) // ret: NULL == 失敗
 {
+#if 1
+	autoList<uchar> *recvData = NULL;
+
+#if 1
+	if(!DoSendAll(sock, "X-GET\x20"))
+		SEND_RECV_ERROR
+#else
+	if(!DoSendAll(sock, GetServiceName()))
+		SEND_RECV_ERROR
+
+	if(!DoSendAll(sock, "\n", 1))
+		SEND_RECV_ERROR
+#endif
+
+	if(!DoSendInt(sock, sendData->GetCount())) // 下位32bit
+		SEND_RECV_ERROR
+		
+	if(!DoSendInt(sock, 0)) // 上位32bit
+		SEND_RECV_ERROR
+
+	if(!DoSendAll(sock, sendData->ElementAt(0), sendData->GetCount()))
+		SEND_RECV_ERROR
+
+	int recvSize = DoRecvInt(sock); // 下位32bit
+
+	if(DoRecvInt(sock) != 0) // 上位32bit
+		SEND_RECV_ERROR
+
+	if(!m_isRange(recvSize, 0, RECVSIZE_MAX))
+		SEND_RECV_ERROR
+
+	void *buff = memAlloc(recvSize);
+
+	if(!DoRecvAll(sock, buff, recvSize))
+	{
+		memFree(buff);
+		SEND_RECV_ERROR
+	}
+	recvData = new autoList<uchar>((uchar *)buff, recvSize);
+
+endFunc:
+	return recvData;
+
+#else // old 暗号化ver, 暗号化に多分問題アリ
+
 	autoList<uchar> *recvData = NULL;
 	uchar clSeed[16];
 	uchar svSeed[16];
@@ -273,6 +318,7 @@ endFunc:
 	memset(&svSeed, 0x00, 16);
 	memset(&encCounter, 0x00, 16);
 	return recvData;
+#endif
 }
 
 static autoList<uchar> *SData;
@@ -387,7 +433,7 @@ static void Thread(void)
 
 			InfoMessage = "CONNECT";
 			ErrorMessage = "";
-		
+
 			uncritical();
 			{
 				retval = connect(sock, (struct sockaddr *)&sa, sizeof(sa));

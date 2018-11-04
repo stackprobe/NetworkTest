@@ -55,7 +55,7 @@ FILE *GetLogFp(void)
 	static FILE *fp;
 
 	if(!fp)
-		fp = fileOpen("C:\\temp\\Game.log", "wt");
+		fp = fileOpen("C:\\tmp\\Game.log", "wt");
 
 	return fp;
 }
