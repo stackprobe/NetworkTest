@@ -29,9 +29,9 @@
 #include <sys\types.h> // sys/stat.h ‚æ‚èæ‚Å‚ ‚é‚±‚ÆB
 #include <sys\stat.h>
 #include <time.h>
+// <--- ’è”Ô
 
 #include <windows.h>
-// <--- ’è”Ô
 
 #include <DxLib.h>
 
