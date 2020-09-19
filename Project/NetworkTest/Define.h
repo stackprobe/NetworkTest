@@ -1,14 +1,16 @@
 #define _CRT_SECURE_NO_WARNINGS
 
-// WinSock {
+// WinSock --->
+
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "wininet.lib")
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
-// }
 
-// ’è”Ô {
+// <--- WinSock
+
+// ’è”Ô --->
 #include <conio.h>
 #include <ctype.h>
 #include <direct.h>
@@ -29,7 +31,7 @@
 #include <time.h>
 
 #include <windows.h>
-// }
+// <--- ’è”Ô
 
 #include <DxLib.h>
 
